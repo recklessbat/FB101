@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BarChart3, CheckCircle2, Circle, ArrowLeft, Send, Users, User } from 'lucide-react';
+import { BarChart3, CheckCircle2, Circle, ArrowLeft, Send, Users, User, AlertTriangle, Award, Shield } from 'lucide-react';
 import {
   currentUser,
   employees,
@@ -7,6 +7,7 @@ import {
   historicRatings,
   existingColleagueFeedback,
   existingManagerFeedback,
+  employeeFlags,
 } from '../data/mockData';
 import EmployeeInsights from '../components/EmployeeInsights';
 
@@ -27,6 +28,8 @@ export default function TalentRatings() {
   const [howRating, setHowRating] = useState('');
   const [whatContext, setWhatContext] = useState('');
   const [howContext, setHowContext] = useState('');
+  const [riskRating, setRiskRating] = useState('');
+  const [riskContext, setRiskContext] = useState('');
 
   const selectEmployee = (emp) => {
     const existing = ratingsState[emp.id];
@@ -35,12 +38,14 @@ export default function TalentRatings() {
     setHowRating(existing?.how || '');
     setWhatContext(existing?.whatContext || '');
     setHowContext(existing?.howContext || '');
+    setRiskRating(existing?.risk || '');
+    setRiskContext(existing?.riskContext || '');
   };
 
   const handleSubmit = () => {
     const updated = {
       ...ratingsState,
-      [selectedEmployee.id]: { what: whatRating, how: howRating, whatContext, howContext, submitted: true },
+      [selectedEmployee.id]: { what: whatRating, how: howRating, whatContext, howContext, risk: riskRating, riskContext, submitted: true },
     };
     setRatingsState(updated);
     localStorage.setItem('talent_ratings', JSON.stringify(updated));
@@ -114,6 +119,9 @@ export default function TalentRatings() {
   );
   const empManagerFeedback = existingManagerFeedback[selectedEmployee.id] || null;
   const empHistoric = historicRatings[selectedEmployee.id] || null;
+  const flags = employeeFlags[selectedEmployee.id];
+  const showRiskBox = flags?.materialRiskTaker || flags?.designatedEmployee;
+  const hasAnyFlags = flags && (flags.promotionRadar || flags.materialRiskTaker || flags.designatedEmployee);
 
   return (
     <div className="animate-fade-in">
@@ -127,6 +135,32 @@ export default function TalentRatings() {
       <div className="flex gap-8">
         {/* Left side - Rating assignment */}
         <div className="w-80 shrink-0 space-y-6">
+          {/* Key Considerations */}
+          {hasAnyFlags && (
+            <div className="rounded-xl border border-slate-200 p-4">
+              <div className="mb-3 text-[12px] font-semibold uppercase tracking-wider text-slate-500">
+                Key Considerations
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {flags.promotionRadar && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
+                    <Award size={12} /> Promotion Radar Candidate
+                  </span>
+                )}
+                {flags.materialRiskTaker && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
+                    <AlertTriangle size={12} /> Material Risk Taker
+                  </span>
+                )}
+                {flags.designatedEmployee && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-semibold text-red-700">
+                    <Shield size={12} /> Designated Employee
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Employee header */}
           <div className="rounded-xl border border-slate-200 p-5">
             <div className="mb-3 flex items-center gap-3">
@@ -208,10 +242,44 @@ export default function TalentRatings() {
             />
           </div>
 
+          {/* Risk and Controls rating */}
+          {showRiskBox && (
+            <div className="rounded-xl border border-slate-200 p-5">
+              <label className="mb-3 block text-[12px] font-semibold uppercase tracking-wider text-slate-500">
+                (C) Risk and Controls
+              </label>
+              <select
+                value={riskRating}
+                onChange={(e) => setRiskRating(e.target.value)}
+                className={`w-full rounded-lg border px-4 py-2.5 text-[13px] font-medium outline-none transition-colors focus:ring-2 focus:ring-primary-100 ${
+                  riskRating === 'Exceeds expectations'
+                    ? 'border-green-300 bg-green-50 text-green-700'
+                    : riskRating === 'Does not meet expectations'
+                    ? 'border-red-300 bg-red-50 text-red-700'
+                    : riskRating === 'Meets expectations'
+                    ? 'border-primary-300 bg-primary-50 text-primary-700'
+                    : 'border-slate-200 text-slate-600'
+                }`}
+              >
+                <option value="">Select a rating...</option>
+                <option value="Exceeds expectations">Exceeds expectations</option>
+                <option value="Meets expectations">Meets expectations</option>
+                <option value="Does not meet expectations">Does not meet expectations</option>
+              </select>
+              <textarea
+                value={riskContext}
+                onChange={(e) => setRiskContext(e.target.value)}
+                rows={3}
+                placeholder="Contextualize how your employee managed risk and controls..."
+                className="mt-3 w-full resize-none rounded-lg border border-slate-200 px-3 py-2.5 text-[12px] text-slate-700 outline-none placeholder:text-slate-400 focus:border-primary-300 focus:ring-2 focus:ring-primary-100"
+              />
+            </div>
+          )}
+
           {/* Submit */}
           <button
             onClick={handleSubmit}
-            disabled={!whatRating || !howRating}
+            disabled={!whatRating || !howRating || (showRiskBox && !riskRating)}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 px-4 py-3 text-[13px] font-semibold text-white transition-colors hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <Send size={15} />

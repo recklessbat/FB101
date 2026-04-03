@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Users, MessageSquare, UserCheck, ChevronDown, ChevronUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Users, MessageSquare, UserCheck, UserPlus, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   currentUser,
   employees,
@@ -7,10 +8,11 @@ import {
   existingManagerFeedback,
 } from '../data/mockData';
 
-const scaleKeys = ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'];
-const scaleColors = { 'Strongly Disagree': '#ef4444', 'Disagree': '#f97316', 'Neutral': '#eab308', 'Agree': '#22c55e', 'Strongly Agree': '#16a34a' };
+const scaleKeys = ['Strongly Disagree', 'Disagree', 'Neither Disagree, Nor Agree', 'Agree', 'Strongly Agree'];
+const scaleColors = { 'Strongly Disagree': '#ef4444', 'Disagree': '#f97316', 'Neither Disagree, Nor Agree': '#eab308', 'Agree': '#22c55e', 'Strongly Agree': '#16a34a' };
 
 export default function ReviewTeamFeedback() {
+  const navigate = useNavigate();
   const directReports = employees.filter((e) => e.managerId === currentUser.id);
   const [expandedId, setExpandedId] = useState(null);
 
@@ -156,6 +158,17 @@ export default function ReviewTeamFeedback() {
                         </div>
                       </div>
                     )}
+                  </div>
+
+                  {/* Solicit Additional Feedback */}
+                  <div className="mt-6 border-t border-slate-100 pt-4">
+                    <button
+                      onClick={() => navigate(`/solicit-feedback?employee=${emp.id}`)}
+                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-[13px] font-medium text-slate-600 transition hover:bg-slate-50"
+                    >
+                      <UserPlus size={14} className="text-primary-500" />
+                      Solicit Additional Feedback
+                    </button>
                   </div>
                 </div>
               )}

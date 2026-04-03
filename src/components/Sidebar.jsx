@@ -6,6 +6,7 @@ import {
   BarChart3,
   FileText,
   Users,
+  UserPlus,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
@@ -16,6 +17,7 @@ const workflows = [
   { label: 'Colleague Feedback', path: '/colleague-feedback', icon: MessageSquare },
   { label: 'Manager Feedback', path: '/manager-feedback', icon: UserCheck },
   { label: 'Performance Ratings', path: '/talent-ratings', icon: BarChart3 },
+  { label: 'Solicit Team Feedback', path: '/solicit-feedback', icon: UserPlus },
   { type: 'divider', label: 'Reviews' },
   { label: 'Review My Feedback', path: '/review-my-feedback', icon: FileText },
   { label: "Review My Team's Feedback", path: '/review-team-feedback', icon: Users },
