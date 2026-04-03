@@ -15,10 +15,11 @@ const workflows = [
   { type: 'divider', label: 'Workflows' },
   { label: 'Colleague Feedback', path: '/colleague-feedback', icon: MessageSquare },
   { label: 'Manager Feedback', path: '/manager-feedback', icon: UserCheck },
-  { label: 'Talent Ratings', path: '/talent-ratings', icon: BarChart3 },
+  { label: 'Performance Ratings', path: '/talent-ratings', icon: BarChart3 },
   { type: 'divider', label: 'Reviews' },
   { label: 'Review My Feedback', path: '/review-my-feedback', icon: FileText },
   { label: "Review My Team's Feedback", path: '/review-team-feedback', icon: Users },
+  { label: 'Review My Team Curve', path: '/team-curve', icon: BarChart3 },
 ];
 
 export default function Sidebar({ open, onToggle }) {

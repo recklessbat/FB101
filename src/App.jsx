@@ -7,6 +7,7 @@ import ManagerFeedback from './pages/ManagerFeedback';
 import TalentRatings from './pages/TalentRatings';
 import ReviewMyFeedback from './pages/ReviewMyFeedback';
 import ReviewTeamFeedback from './pages/ReviewTeamFeedback';
+import TeamCurve from './pages/TeamCurve';
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -24,6 +25,7 @@ export default function App() {
               <Route path="/talent-ratings" element={<TalentRatings />} />
               <Route path="/review-my-feedback" element={<ReviewMyFeedback />} />
               <Route path="/review-team-feedback" element={<ReviewTeamFeedback />} />
+              <Route path="/team-curve" element={<TeamCurve />} />
             </Routes>
           </div>
         </main>

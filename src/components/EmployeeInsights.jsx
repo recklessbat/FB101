@@ -7,8 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  LineChart,
-  Line,
+  Legend,
 } from 'recharts';
 import {
   User,
@@ -22,17 +21,19 @@ import {
   Plane,
   Clock,
   Tag,
+  GitBranch,
 } from 'lucide-react';
+import { getTotalReports, careerTimelines } from '../data/mockData';
 
 const tabs = [
   { id: 'metadata', label: 'Profile', icon: User },
+  { id: 'timeline', label: 'Timeline', icon: GitBranch },
   { id: 'history', label: 'History', icon: TrendingUp },
   { id: 'colleague', label: 'Colleague Feedback', icon: MessageSquare },
-  { id: 'upward', label: 'Staff Feedback', icon: Users },
+  { id: 'upward', label: 'Directs Feedback', icon: Users },
 ];
 
 const ratingToNum = { 'Exceeds expectations': 3, 'Meets expectations': 2, 'Does not meet expectations': 1 };
-const ratingColors = { 'Exceeds expectations': '#22c55e', 'Meets expectations': '#5c7cfa', 'Does not meet expectations': '#ef4444' };
 
 export default function EmployeeInsights({ employee, historic, colleagueFeedback, managerFeedback }) {
   const [activeTab, setActiveTab] = useState('metadata');
@@ -40,7 +41,7 @@ export default function EmployeeInsights({ employee, historic, colleagueFeedback
   return (
     <div className="rounded-xl border border-slate-200">
       {/* Tab bar */}
-      <div className="flex border-b border-slate-200">
+      <div className="flex border-b border-slate-200 overflow-x-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const active = activeTab === tab.id;
@@ -48,7 +49,7 @@ export default function EmployeeInsights({ employee, historic, colleagueFeedback
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 border-b-2 px-4 py-3 text-[12px] font-medium transition-colors ${
+              className={`flex items-center gap-1.5 whitespace-nowrap border-b-2 px-4 py-3 text-[12px] font-medium transition-colors ${
                 active
                   ? 'border-primary-600 text-primary-700'
                   : 'border-transparent text-slate-400 hover:text-slate-600'
@@ -64,6 +65,7 @@ export default function EmployeeInsights({ employee, historic, colleagueFeedback
       {/* Tab content */}
       <div className="p-5">
         {activeTab === 'metadata' && <MetadataTab employee={employee} />}
+        {activeTab === 'timeline' && <TimelineTab employee={employee} />}
         {activeTab === 'history' && <HistoryTab historic={historic} />}
         {activeTab === 'colleague' && <ColleagueFeedbackTab feedback={colleagueFeedback} />}
         {activeTab === 'upward' && <UpwardFeedbackTab data={managerFeedback} />}
@@ -73,11 +75,15 @@ export default function EmployeeInsights({ employee, historic, colleagueFeedback
 }
 
 function MetadataTab({ employee }) {
+  const totalReports = getTotalReports(employee.id);
+  const directCount = employee.directReports?.length || 0;
+
   const items = [
     { icon: MapPin, label: 'Location', value: employee.location },
     { icon: Calendar, label: 'Tenure', value: employee.tenure },
     { icon: Briefcase, label: 'Grade / Level', value: employee.grade },
-    { icon: Users, label: 'Direct Reports', value: employee.directReports?.length || 0 },
+    { icon: Users, label: 'Direct Reports', value: directCount },
+    { icon: Users, label: 'Total Reports', value: totalReports },
     { icon: Plane, label: 'Mobility This Year', value: employee.mobility ? 'Yes' : 'No' },
     { icon: Globe, label: 'International Relocation', value: employee.internationalRelocation ? 'Yes' : 'No' },
     { icon: Clock, label: 'Leave of Absence', value: employee.leaveOfAbsence ? 'Yes' : 'No' },
@@ -101,6 +107,59 @@ function MetadataTab({ employee }) {
   );
 }
 
+function TimelineTab({ employee }) {
+  const events = careerTimelines[employee.id];
+
+  if (!events || events.length === 0) {
+    return (
+      <div className="py-8 text-center text-[13px] text-slate-400">
+        No career timeline data available for this employee.
+      </div>
+    );
+  }
+
+  const sorted = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const typeStyles = {
+    joined: { color: 'bg-green-500', label: 'Joined' },
+    promotion: { color: 'bg-primary-500', label: 'Promotion' },
+    role_change: { color: 'bg-violet-500', label: 'Role Change' },
+    relocation: { color: 'bg-amber-500', label: 'Relocation' },
+    manager_change: { color: 'bg-slate-500', label: 'Manager Change' },
+    mobility: { color: 'bg-cyan-500', label: 'Mobility' },
+    leave: { color: 'bg-red-400', label: 'Leave' },
+    return: { color: 'bg-green-400', label: 'Return' },
+  };
+
+  return (
+    <div className="animate-fade-in">
+      <h3 className="mb-4 text-[13px] font-semibold text-slate-700">Career Journey</h3>
+      <div className="max-h-80 overflow-y-auto pr-1">
+        <div className="relative ml-3 border-l-2 border-slate-200 pl-6">
+          {sorted.map((event, i) => {
+            const style = typeStyles[event.type] || { color: 'bg-slate-400', label: event.type };
+            return (
+              <div key={i} className="relative mb-6 last:mb-0">
+                {/* Dot on the line */}
+                <div className={`absolute -left-[31px] top-1 h-3 w-3 rounded-full ${style.color} ring-2 ring-white`} />
+                <div className="text-[11px] text-slate-400">
+                  {new Date(event.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric', day: 'numeric' })}
+                </div>
+                <div className="mt-0.5 flex items-center gap-2">
+                  <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold text-white ${style.color}`}>
+                    {style.label}
+                  </span>
+                </div>
+                <p className="mt-1 text-[13px] leading-relaxed text-slate-600">{event.description}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function HistoryTab({ historic }) {
   if (!historic) {
     return (
@@ -116,8 +175,15 @@ function HistoryTab({ historic }) {
     'How (Delivered)': historic.how[i] ? ratingToNum[historic.how[i]] : 0,
   }));
 
-  const salaryData = historic.years
-    .map((year, i) => (historic.salary[i] ? { year, salary: historic.salary[i] } : null))
+  const compData = historic.years
+    .map((year, i) => {
+      if (!historic.salary[i]) return null;
+      return {
+        year,
+        Salary: historic.salary[i],
+        'Incentive Comp': historic.bonus?.[i] || 0,
+      };
+    })
     .filter(Boolean);
 
   const ratingLabel = (val) => {
@@ -153,9 +219,9 @@ function HistoryTab({ historic }) {
       </div>
 
       <div>
-        <h3 className="mb-3 text-[13px] font-semibold text-slate-700">Salary Trajectory</h3>
-        <ResponsiveContainer width="100%" height={160}>
-          <LineChart data={salaryData}>
+        <h3 className="mb-3 text-[13px] font-semibold text-slate-700">Historic Compensation</h3>
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={compData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
             <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#94a3b8' }} />
             <YAxis
@@ -164,11 +230,13 @@ function HistoryTab({ historic }) {
               width={50}
             />
             <Tooltip
-              formatter={(val) => [`$${val.toLocaleString()}`, 'Salary']}
+              formatter={(val, name) => [`$${val.toLocaleString()}`, name]}
               contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}
             />
-            <Line type="monotone" dataKey="salary" stroke="#22c55e" strokeWidth={2} dot={{ r: 4, fill: '#22c55e' }} />
-          </LineChart>
+            <Legend wrapperStyle={{ fontSize: 11 }} />
+            <Bar dataKey="Salary" stackId="comp" fill="#5c7cfa" radius={[0, 0, 0, 0]} />
+            <Bar dataKey="Incentive Comp" stackId="comp" fill="#22c55e" radius={[4, 4, 0, 0]} />
+          </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
@@ -184,7 +252,6 @@ function ColleagueFeedbackTab({ feedback }) {
     );
   }
 
-  // Aggregate themes
   const allStrengths = [];
   const allDevelopment = [];
   feedback.forEach((f) => {
@@ -242,7 +309,7 @@ function UpwardFeedbackTab({ data }) {
   if (!data) {
     return (
       <div className="py-8 text-center text-[13px] text-slate-400">
-        No upward feedback available. This employee may not manage staff.
+        No directs feedback available. This employee may not manage staff.
       </div>
     );
   }
@@ -256,7 +323,7 @@ function UpwardFeedbackTab({ data }) {
   return (
     <div className="animate-fade-in">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-[13px] font-semibold text-slate-700">Manager Upward Feedback</h3>
+        <h3 className="text-[13px] font-semibold text-slate-700">Directs Upward Feedback</h3>
         <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-500">
           n = {respondents} of {totalStaff} staff
         </span>
@@ -274,7 +341,6 @@ function UpwardFeedbackTab({ data }) {
                 <p className="text-[12px] font-medium text-slate-600">{q.text}</p>
                 <span className="whitespace-nowrap text-[11px] font-semibold text-green-600">{agreePct}% Agree / Strongly Agree</span>
               </div>
-              {/* Stacked horizontal bar */}
               <div className="flex h-5 overflow-hidden rounded-full">
                 {scaleKeys.map((key) => {
                   const count = q.responses[key] || 0;

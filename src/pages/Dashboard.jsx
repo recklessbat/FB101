@@ -34,7 +34,7 @@ export default function Dashboard() {
       path: '/manager-feedback',
     },
     {
-      title: 'Complete Talent Ratings',
+      title: 'Complete Performance Ratings',
       description: `${pendingRatings} staff member${pendingRatings !== 1 ? 's' : ''} awaiting performance ratings.`,
       icon: BarChart3,
       color: 'amber',

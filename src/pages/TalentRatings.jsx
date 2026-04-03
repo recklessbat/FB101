@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BarChart3, CheckCircle2, Circle, ArrowLeft, Send, User } from 'lucide-react';
+import { BarChart3, CheckCircle2, Circle, ArrowLeft, Send, Users, User } from 'lucide-react';
 import {
   currentUser,
   employees,
@@ -10,7 +10,7 @@ import {
 } from '../data/mockData';
 import EmployeeInsights from '../components/EmployeeInsights';
 
-const ratingOptions = ['Exceeds expectations', 'Meets expectations', 'Does not meet expectations'];
+const ratingOptions = ['', 'Exceeds expectations', 'Meets expectations', 'Does not meet expectations'];
 
 export default function TalentRatings() {
   const directReports = employees.filter((e) => e.managerId === currentUser.id);
@@ -25,18 +25,22 @@ export default function TalentRatings() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [whatRating, setWhatRating] = useState('');
   const [howRating, setHowRating] = useState('');
+  const [whatContext, setWhatContext] = useState('');
+  const [howContext, setHowContext] = useState('');
 
   const selectEmployee = (emp) => {
     const existing = ratingsState[emp.id];
     setSelectedEmployee(emp);
     setWhatRating(existing?.what || '');
     setHowRating(existing?.how || '');
+    setWhatContext(existing?.whatContext || '');
+    setHowContext(existing?.howContext || '');
   };
 
   const handleSubmit = () => {
     const updated = {
       ...ratingsState,
-      [selectedEmployee.id]: { what: whatRating, how: howRating, submitted: true },
+      [selectedEmployee.id]: { what: whatRating, how: howRating, whatContext, howContext, submitted: true },
     };
     setRatingsState(updated);
     localStorage.setItem('talent_ratings', JSON.stringify(updated));
@@ -50,7 +54,7 @@ export default function TalentRatings() {
         <div className="mb-8">
           <div className="mb-1 flex items-center gap-2">
             <BarChart3 size={18} className="text-amber-600" />
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Talent Ratings</h1>
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Performance Ratings</h1>
           </div>
           <p className="text-sm text-slate-500">
             Provide performance ratings for your direct reports across two dimensions.
@@ -61,6 +65,7 @@ export default function TalentRatings() {
           {directReports.map((emp) => {
             const rating = ratingsState[emp.id];
             const isSubmitted = rating?.submitted;
+            const isManager = emp.directReports && emp.directReports.length > 0;
             return (
               <button
                 key={emp.id}
@@ -71,7 +76,17 @@ export default function TalentRatings() {
                   {emp.name.split(' ').map((n) => n[0]).join('')}
                 </div>
                 <div className="flex-1">
-                  <div className="text-[14px] font-medium text-slate-800">{emp.name}</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[14px] font-medium text-slate-800">{emp.name}</span>
+                    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                      isManager
+                        ? 'bg-violet-50 text-violet-600'
+                        : 'bg-slate-100 text-slate-500'
+                    }`}>
+                      {isManager ? <Users size={10} /> : <User size={10} />}
+                      {isManager ? 'Manager' : 'Individual Contributor'}
+                    </span>
+                  </div>
                   <div className="text-[12px] text-slate-400">{emp.title} · {emp.grade}</div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -109,11 +124,11 @@ export default function TalentRatings() {
         <ArrowLeft size={15} /> Back to staff list
       </button>
 
-      <div className="flex gap-6">
+      <div className="flex gap-8">
         {/* Left side - Rating assignment */}
-        <div className="w-80 shrink-0">
+        <div className="w-80 shrink-0 space-y-6">
           {/* Employee header */}
-          <div className="mb-6 rounded-xl border border-slate-200 p-5">
+          <div className="rounded-xl border border-slate-200 p-5">
             <div className="mb-3 flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-amber-50 text-[14px] font-semibold text-amber-700">
                 {selectedEmployee.name.split(' ').map((n) => n[0]).join('')}
@@ -130,73 +145,67 @@ export default function TalentRatings() {
           </div>
 
           {/* What rating */}
-          <div className="mb-5">
-            <label className="mb-2 block text-[12px] font-semibold uppercase tracking-wider text-slate-500">
+          <div className="rounded-xl border border-slate-200 p-5">
+            <label className="mb-3 block text-[12px] font-semibold uppercase tracking-wider text-slate-500">
               (A) What They Delivered
             </label>
-            <div className="space-y-2">
-              {ratingOptions.map((opt) => (
-                <button
-                  key={opt}
-                  onClick={() => setWhatRating(opt)}
-                  className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-[13px] font-medium transition-all ${
-                    whatRating === opt
-                      ? opt === 'Exceeds expectations'
-                        ? 'border-green-300 bg-green-50 text-green-700'
-                        : opt === 'Meets expectations'
-                        ? 'border-primary-300 bg-primary-50 text-primary-700'
-                        : 'border-red-300 bg-red-50 text-red-700'
-                      : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
-                  }`}
-                >
-                  <div className={`h-3 w-3 rounded-full border-2 ${
-                    whatRating === opt
-                      ? opt === 'Exceeds expectations'
-                        ? 'border-green-500 bg-green-500'
-                        : opt === 'Meets expectations'
-                        ? 'border-primary-500 bg-primary-500'
-                        : 'border-red-500 bg-red-500'
-                      : 'border-slate-300'
-                  }`} />
-                  {opt}
-                </button>
-              ))}
-            </div>
+            <select
+              value={whatRating}
+              onChange={(e) => setWhatRating(e.target.value)}
+              className={`w-full rounded-lg border px-4 py-2.5 text-[13px] font-medium outline-none transition-colors focus:ring-2 focus:ring-primary-100 ${
+                whatRating === 'Exceeds expectations'
+                  ? 'border-green-300 bg-green-50 text-green-700'
+                  : whatRating === 'Does not meet expectations'
+                  ? 'border-red-300 bg-red-50 text-red-700'
+                  : whatRating === 'Meets expectations'
+                  ? 'border-primary-300 bg-primary-50 text-primary-700'
+                  : 'border-slate-200 text-slate-600'
+              }`}
+            >
+              <option value="">Select a rating...</option>
+              <option value="Exceeds expectations">Exceeds expectations</option>
+              <option value="Meets expectations">Meets expectations</option>
+              <option value="Does not meet expectations">Does not meet expectations</option>
+            </select>
+            <textarea
+              value={whatContext}
+              onChange={(e) => setWhatContext(e.target.value)}
+              rows={3}
+              placeholder="Contextualize what your employee delivered this year relative to objectives and goals..."
+              className="mt-3 w-full resize-none rounded-lg border border-slate-200 px-3 py-2.5 text-[12px] text-slate-700 outline-none placeholder:text-slate-400 focus:border-primary-300 focus:ring-2 focus:ring-primary-100"
+            />
           </div>
 
           {/* How rating */}
-          <div className="mb-6">
-            <label className="mb-2 block text-[12px] font-semibold uppercase tracking-wider text-slate-500">
+          <div className="rounded-xl border border-slate-200 p-5">
+            <label className="mb-3 block text-[12px] font-semibold uppercase tracking-wider text-slate-500">
               (B) How They Delivered It
             </label>
-            <div className="space-y-2">
-              {ratingOptions.map((opt) => (
-                <button
-                  key={opt}
-                  onClick={() => setHowRating(opt)}
-                  className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-[13px] font-medium transition-all ${
-                    howRating === opt
-                      ? opt === 'Exceeds expectations'
-                        ? 'border-green-300 bg-green-50 text-green-700'
-                        : opt === 'Meets expectations'
-                        ? 'border-primary-300 bg-primary-50 text-primary-700'
-                        : 'border-red-300 bg-red-50 text-red-700'
-                      : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
-                  }`}
-                >
-                  <div className={`h-3 w-3 rounded-full border-2 ${
-                    howRating === opt
-                      ? opt === 'Exceeds expectations'
-                        ? 'border-green-500 bg-green-500'
-                        : opt === 'Meets expectations'
-                        ? 'border-primary-500 bg-primary-500'
-                        : 'border-red-500 bg-red-500'
-                      : 'border-slate-300'
-                  }`} />
-                  {opt}
-                </button>
-              ))}
-            </div>
+            <select
+              value={howRating}
+              onChange={(e) => setHowRating(e.target.value)}
+              className={`w-full rounded-lg border px-4 py-2.5 text-[13px] font-medium outline-none transition-colors focus:ring-2 focus:ring-primary-100 ${
+                howRating === 'Exceeds expectations'
+                  ? 'border-green-300 bg-green-50 text-green-700'
+                  : howRating === 'Does not meet expectations'
+                  ? 'border-red-300 bg-red-50 text-red-700'
+                  : howRating === 'Meets expectations'
+                  ? 'border-primary-300 bg-primary-50 text-primary-700'
+                  : 'border-slate-200 text-slate-600'
+              }`}
+            >
+              <option value="">Select a rating...</option>
+              <option value="Exceeds expectations">Exceeds expectations</option>
+              <option value="Meets expectations">Meets expectations</option>
+              <option value="Does not meet expectations">Does not meet expectations</option>
+            </select>
+            <textarea
+              value={howContext}
+              onChange={(e) => setHowContext(e.target.value)}
+              rows={3}
+              placeholder="Contextualize how your employee delivered their objectives relative to expectations..."
+              className="mt-3 w-full resize-none rounded-lg border border-slate-200 px-3 py-2.5 text-[12px] text-slate-700 outline-none placeholder:text-slate-400 focus:border-primary-300 focus:ring-2 focus:ring-primary-100"
+            />
           </div>
 
           {/* Submit */}

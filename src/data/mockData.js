@@ -10,45 +10,135 @@ export const currentUser = {
 
 // All employees
 export const employees = [
-  { id: 'u1', name: 'Alex Morgan', title: 'Senior Manager, Strategy & Operations', grade: 'M3', managerId: 'u10', location: 'New York', tenure: '4.5 years', startDate: '2021-09-15', directReports: ['u2', 'u3', 'u4', 'u5'], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u1', name: 'Alex Morgan', title: 'Senior Manager, Strategy & Operations', grade: 'M3', managerId: 'u10', location: 'New York', tenure: '4.5 years', startDate: '2021-09-15', directReports: ['u2', 'u3', 'u4', 'u5', 'u13', 'u14', 'u15'], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
   { id: 'u2', name: 'Jordan Lee', title: 'Analyst, Strategy', grade: 'A2', managerId: 'u1', location: 'New York', tenure: '2.1 years', startDate: '2024-01-08', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
-  { id: 'u3', name: 'Taylor Kim', title: 'Associate, Operations', grade: 'A3', managerId: 'u1', location: 'Chicago', tenure: '3.8 years', startDate: '2022-05-20', directReports: ['u6', 'u7'], mobility: true, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u3', name: 'Taylor Kim', title: 'Associate Manager, Operations', grade: 'M1', managerId: 'u1', location: 'Chicago', tenure: '3.8 years', startDate: '2022-05-20', directReports: ['u6', 'u7', 'u16'], mobility: true, internationalRelocation: false, leaveOfAbsence: false },
   { id: 'u4', name: 'Casey Rivera', title: 'Senior Analyst, Strategy', grade: 'SA1', managerId: 'u1', location: 'San Francisco', tenure: '1.5 years', startDate: '2024-10-01', directReports: [], mobility: false, internationalRelocation: true, leaveOfAbsence: false },
   { id: 'u5', name: 'Riley Patel', title: 'Associate, Strategy', grade: 'A3', managerId: 'u1', location: 'New York', tenure: '5.2 years', startDate: '2020-11-15', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: true },
   { id: 'u6', name: 'Morgan Chen', title: 'Analyst, Operations', grade: 'A1', managerId: 'u3', location: 'Chicago', tenure: '0.8 years', startDate: '2025-07-10', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
   { id: 'u7', name: 'Avery Brooks', title: 'Analyst, Operations', grade: 'A2', managerId: 'u3', location: 'Chicago', tenure: '1.2 years', startDate: '2025-03-01', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
-  { id: 'u8', name: 'Drew Nakamura', title: 'VP, Product', grade: 'VP1', managerId: 'u10', location: 'San Francisco', tenure: '6.1 years', startDate: '2019-12-02', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
-  { id: 'u9', name: 'Quinn Okafor', title: 'Director, Engineering', grade: 'D1', managerId: 'u10', location: 'Austin', tenure: '3.3 years', startDate: '2022-12-05', directReports: [], mobility: true, internationalRelocation: false, leaveOfAbsence: false },
-  { id: 'u10', name: 'Sarah Chen', title: 'SVP, Strategy & Operations', grade: 'SVP', managerId: null, location: 'New York', tenure: '8.4 years', startDate: '2017-09-01', directReports: ['u1', 'u8', 'u9'], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
-  { id: 'u11', name: 'Jamie Foster', title: 'Manager, Finance', grade: 'M2', managerId: 'u10', location: 'London', tenure: '2.7 years', startDate: '2023-08-15', directReports: [], mobility: false, internationalRelocation: true, leaveOfAbsence: false },
+  { id: 'u8', name: 'Drew Nakamura', title: 'VP, Product', grade: 'VP1', managerId: 'u10', location: 'San Francisco', tenure: '6.1 years', startDate: '2019-12-02', directReports: ['u17', 'u18'], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u9', name: 'Quinn Okafor', title: 'Director, Engineering', grade: 'D1', managerId: 'u10', location: 'Austin', tenure: '3.3 years', startDate: '2022-12-05', directReports: ['u19', 'u20'], mobility: true, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u10', name: 'Sarah Chen', title: 'SVP, Strategy & Operations', grade: 'SVP', managerId: null, location: 'New York', tenure: '8.4 years', startDate: '2017-09-01', directReports: ['u1', 'u8', 'u9', 'u11'], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u11', name: 'Jamie Foster', title: 'Manager, Finance', grade: 'M2', managerId: 'u10', location: 'London', tenure: '2.7 years', startDate: '2023-08-15', directReports: ['u21'], mobility: false, internationalRelocation: true, leaveOfAbsence: false },
   { id: 'u12', name: 'Skyler Dubois', title: 'Associate, Data Science', grade: 'A3', managerId: 'u9', location: 'Austin', tenure: '1.9 years', startDate: '2024-06-01', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u13', name: 'Priya Sharma', title: 'Senior Analyst, Operations', grade: 'SA1', managerId: 'u1', location: 'New York', tenure: '2.9 years', startDate: '2023-04-10', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u14', name: 'Marcus Williams', title: 'Analyst, Strategy', grade: 'A2', managerId: 'u1', location: 'Chicago', tenure: '1.3 years', startDate: '2024-11-20', directReports: [], mobility: true, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u15', name: 'Elena Vasquez', title: 'Associate, Operations', grade: 'A3', managerId: 'u1', location: 'San Francisco', tenure: '3.1 years', startDate: '2023-02-01', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u16', name: 'Sam Okonkwo', title: 'Analyst, Operations', grade: 'A1', managerId: 'u3', location: 'Chicago', tenure: '0.5 years', startDate: '2025-10-15', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u17', name: 'Lena Park', title: 'Senior Product Manager', grade: 'M2', managerId: 'u8', location: 'San Francisco', tenure: '4.0 years', startDate: '2022-03-14', directReports: ['u22'], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u18', name: 'Raj Mehta', title: 'Product Manager', grade: 'M1', managerId: 'u8', location: 'San Francisco', tenure: '2.2 years', startDate: '2024-01-22', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u19', name: 'Natasha Volkov', title: 'Senior Software Engineer', grade: 'SA2', managerId: 'u9', location: 'Austin', tenure: '3.0 years', startDate: '2023-03-15', directReports: [], mobility: false, internationalRelocation: true, leaveOfAbsence: false },
+  { id: 'u20', name: 'Diego Santos', title: 'Software Engineer', grade: 'A3', managerId: 'u9', location: 'Austin', tenure: '1.6 years', startDate: '2024-09-01', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u21', name: 'Hannah O\'Brien', title: 'Financial Analyst', grade: 'A2', managerId: 'u11', location: 'London', tenure: '1.1 years', startDate: '2025-02-10', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
+  { id: 'u22', name: 'Chris Tanaka', title: 'Associate Product Manager', grade: 'A3', managerId: 'u17', location: 'San Francisco', tenure: '0.9 years', startDate: '2025-06-20', directReports: [], mobility: false, internationalRelocation: false, leaveOfAbsence: false },
 ];
 
-// Historic talent ratings (3 years)
+// Helper: count total org size under a manager (recursive)
+export function getTotalReports(employeeId) {
+  const emp = employees.find((e) => e.id === employeeId);
+  if (!emp || emp.directReports.length === 0) return 0;
+  let total = emp.directReports.length;
+  emp.directReports.forEach((drId) => {
+    total += getTotalReports(drId);
+  });
+  return total;
+}
+
+// Career timeline events per employee
+export const careerTimelines = {
+  u2: [
+    { date: '2024-01-08', type: 'joined', description: 'Joined as Analyst, Strategy (A1)' },
+    { date: '2024-07-01', type: 'promotion', description: 'Promoted to A2' },
+    { date: '2025-03-15', type: 'manager_change', description: 'Manager changed from Jamie Foster to Alex Morgan' },
+  ],
+  u3: [
+    { date: '2022-05-20', type: 'joined', description: 'Joined as Analyst, Operations (A1)' },
+    { date: '2023-01-10', type: 'promotion', description: 'Promoted to A2' },
+    { date: '2023-09-01', type: 'role_change', description: 'Moved to Associate, Operations (A3)' },
+    { date: '2024-03-15', type: 'relocation', description: 'Relocated from New York to Chicago' },
+    { date: '2024-11-01', type: 'promotion', description: 'Promoted to Associate Manager, Operations (M1)' },
+    { date: '2025-06-01', type: 'mobility', description: 'Completed rotation in Supply Chain division' },
+  ],
+  u4: [
+    { date: '2024-10-01', type: 'joined', description: 'Joined as Senior Analyst, Strategy (SA1)' },
+    { date: '2025-02-15', type: 'relocation', description: 'International relocation from London to San Francisco' },
+  ],
+  u5: [
+    { date: '2020-11-15', type: 'joined', description: 'Joined as Analyst, Strategy (A1)' },
+    { date: '2021-06-01', type: 'promotion', description: 'Promoted to A2' },
+    { date: '2022-04-01', type: 'role_change', description: 'Moved to Associate, Strategy (A3)' },
+    { date: '2023-01-15', type: 'manager_change', description: 'Manager changed from Drew Nakamura to Alex Morgan' },
+    { date: '2025-01-10', type: 'leave', description: 'Started parental leave of absence' },
+    { date: '2025-07-10', type: 'return', description: 'Returned from leave of absence' },
+  ],
+  u13: [
+    { date: '2023-04-10', type: 'joined', description: 'Joined as Analyst, Operations (A2)' },
+    { date: '2024-04-01', type: 'promotion', description: 'Promoted to Senior Analyst (SA1)' },
+    { date: '2024-09-01', type: 'role_change', description: 'Transitioned from Operations Analytics to Strategy Operations' },
+  ],
+  u14: [
+    { date: '2024-11-20', type: 'joined', description: 'Joined as Analyst, Strategy (A2)' },
+    { date: '2025-06-01', type: 'mobility', description: 'Completed short-term assignment in Chicago office' },
+  ],
+  u15: [
+    { date: '2023-02-01', type: 'joined', description: 'Joined as Analyst, Operations (A1)' },
+    { date: '2023-08-01', type: 'promotion', description: 'Promoted to A2' },
+    { date: '2024-06-15', type: 'role_change', description: 'Moved to Associate, Operations (A3)' },
+    { date: '2025-01-01', type: 'relocation', description: 'Relocated from New York to San Francisco' },
+  ],
+};
+
+// Historic talent ratings (3 years) with compensation
 export const historicRatings = {
   u2: {
     what: ['Meets expectations', 'Meets expectations', 'Exceeds expectations'],
     how: ['Meets expectations', 'Exceeds expectations', 'Meets expectations'],
     years: ['2023', '2024', '2025'],
     salary: [72000, 78000, 85000],
+    bonus: [5400, 7800, 10200],
   },
   u3: {
     what: ['Exceeds expectations', 'Exceeds expectations', 'Meets expectations'],
     how: ['Meets expectations', 'Meets expectations', 'Exceeds expectations'],
     years: ['2023', '2024', '2025'],
     salary: [88000, 96000, 105000],
+    bonus: [13200, 16800, 15750],
   },
   u4: {
     what: ['Meets expectations', null, null],
     how: ['Meets expectations', null, null],
     years: ['2023', '2024', '2025'],
     salary: [95000, null, null],
+    bonus: [9500, null, null],
   },
   u5: {
     what: ['Meets expectations', 'Does not meet expectations', 'Meets expectations'],
     how: ['Exceeds expectations', 'Meets expectations', 'Meets expectations'],
     years: ['2023', '2024', '2025'],
     salary: [82000, 83000, 90000],
+    bonus: [8200, 4150, 9000],
+  },
+  u13: {
+    what: ['Meets expectations', 'Exceeds expectations', null],
+    how: ['Meets expectations', 'Meets expectations', null],
+    years: ['2023', '2024', '2025'],
+    salary: [76000, 88000, null],
+    bonus: [5700, 11000, null],
+  },
+  u14: {
+    what: [null, null, null],
+    how: [null, null, null],
+    years: ['2023', '2024', '2025'],
+    salary: [null, null, null],
+    bonus: [null, null, null],
+  },
+  u15: {
+    what: ['Meets expectations', 'Meets expectations', 'Meets expectations'],
+    how: ['Meets expectations', 'Does not meet expectations', 'Meets expectations'],
+    years: ['2023', '2024', '2025'],
+    salary: [68000, 70000, 78000],
+    bonus: [5100, 3500, 7800],
   },
 };
 
@@ -131,44 +221,102 @@ export const existingColleagueFeedback = [
     date: '2026-02-18',
     themes: { strengths: ['Institutional knowledge', 'Strategic mindset'], development: ['Written communication', 'Prioritization'] },
   },
+  {
+    id: 'cf8',
+    fromId: 'u9',
+    fromName: 'Quinn Okafor',
+    toId: 'u13',
+    toName: 'Priya Sharma',
+    feedback: 'Priya is a strong analytical thinker who consistently delivers thorough and well-reasoned work. She takes initiative on complex projects and is reliable under pressure. Priya could benefit from developing more confidence in presenting her ideas to senior leaders.',
+    visibleTo: 'both',
+    date: '2026-02-28',
+    themes: { strengths: ['Analytical thinking', 'Initiative'], development: ['Presentation confidence'] },
+  },
+  {
+    id: 'cf9',
+    fromId: 'u13',
+    fromName: 'Priya Sharma',
+    toId: 'u14',
+    toName: 'Marcus Williams',
+    feedback: 'Marcus has quickly ramped up since joining the team and shows great curiosity. He asks thoughtful questions and contributes meaningfully to strategy discussions. Marcus would benefit from developing a deeper understanding of our operational processes.',
+    visibleTo: 'both',
+    date: '2026-03-10',
+    themes: { strengths: ['Quick ramp-up', 'Curiosity'], development: ['Operational understanding'] },
+  },
+  {
+    id: 'cf10',
+    fromId: 'u4',
+    fromName: 'Casey Rivera',
+    toId: 'u15',
+    toName: 'Elena Vasquez',
+    feedback: 'Elena is highly organized and brings structure to every project she touches. Her process improvements in Q4 saved the team significant time. Elena could work on being more vocal in team meetings and sharing her ideas earlier in the brainstorming process.',
+    visibleTo: 'manager',
+    date: '2026-03-02',
+    themes: { strengths: ['Organization', 'Process improvement'], development: ['Speaking up in meetings'] },
+  },
+  {
+    id: 'cf11',
+    fromId: 'u15',
+    fromName: 'Elena Vasquez',
+    toId: 'u4',
+    toName: 'Casey Rivera',
+    feedback: 'Casey brings a fresh international perspective that enriches our team discussions. Their analytical rigor is exceptional, and they are not afraid to challenge assumptions constructively. Casey could focus on building stronger relationships with partner teams outside Strategy.',
+    visibleTo: 'both',
+    date: '2026-03-08',
+    themes: { strengths: ['International perspective', 'Analytical rigor'], development: ['Relationship building'] },
+  },
+  {
+    id: 'cf12',
+    fromId: 'u2',
+    fromName: 'Jordan Lee',
+    toId: 'u13',
+    toName: 'Priya Sharma',
+    feedback: 'Priya is an outstanding mentor and collaborator. She proactively shares knowledge and helps onboard new team members. Priya should consider taking on more visible leadership roles in cross-team initiatives.',
+    visibleTo: 'both',
+    date: '2026-02-22',
+    themes: { strengths: ['Mentorship', 'Knowledge sharing'], development: ['Leadership visibility'] },
+  },
 ];
 
 // Manager upward feedback (from workflow 2)
 export const existingManagerFeedback = {
   u1: {
-    respondents: 4,
-    totalStaff: 4,
+    respondents: 6,
+    totalStaff: 7,
     questions: [
-      { text: 'Provides me actionable feedback on my performance', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 1, 'Agree': 2, 'Strongly Agree': 1 } },
-      { text: 'Provides clear, strategic vision for our team', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 1, 'Strongly Agree': 3 } },
-      { text: 'Delegates work appropriately', responses: { 'Strongly Disagree': 0, 'Disagree': 1, 'Neutral': 1, 'Agree': 2, 'Strongly Agree': 0 } },
-      { text: 'Fosters an inclusive team culture', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 1, 'Strongly Agree': 3 } },
-      { text: 'Supports my professional development', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 1, 'Agree': 1, 'Strongly Agree': 2 } },
-      { text: 'Communicates expectations clearly', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 3, 'Strongly Agree': 1 } },
+      { text: 'Provides me actionable feedback on my performance', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 1, 'Agree': 3, 'Strongly Agree': 2 } },
+      { text: 'Provides clear, strategic vision for our team', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 2, 'Strongly Agree': 4 } },
+      { text: 'Delegates work appropriately', responses: { 'Strongly Disagree': 0, 'Disagree': 1, 'Neutral': 1, 'Agree': 3, 'Strongly Agree': 1 } },
+      { text: 'Fosters an inclusive team culture', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 1, 'Strongly Agree': 5 } },
+      { text: 'Supports my professional development', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 1, 'Agree': 2, 'Strongly Agree': 3 } },
+      { text: 'Communicates expectations clearly', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 1, 'Agree': 3, 'Strongly Agree': 2 } },
     ],
-    nps: { promoters: 3, passives: 1, detractors: 0 },
+    nps: { promoters: 4, passives: 1, detractors: 1 },
   },
   u3: {
-    respondents: 2,
-    totalStaff: 2,
+    respondents: 3,
+    totalStaff: 3,
     questions: [
-      { text: 'Provides me actionable feedback on my performance', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 1, 'Strongly Agree': 1 } },
-      { text: 'Provides clear, strategic vision for our team', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 1, 'Agree': 1, 'Strongly Agree': 0 } },
-      { text: 'Delegates work appropriately', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 0, 'Strongly Agree': 2 } },
-      { text: 'Fosters an inclusive team culture', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 1, 'Strongly Agree': 1 } },
-      { text: 'Supports my professional development', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 1, 'Agree': 0, 'Strongly Agree': 1 } },
-      { text: 'Communicates expectations clearly', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 2, 'Strongly Agree': 0 } },
+      { text: 'Provides me actionable feedback on my performance', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 2, 'Strongly Agree': 1 } },
+      { text: 'Provides clear, strategic vision for our team', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 1, 'Agree': 1, 'Strongly Agree': 1 } },
+      { text: 'Delegates work appropriately', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 1, 'Strongly Agree': 2 } },
+      { text: 'Fosters an inclusive team culture', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 1, 'Strongly Agree': 2 } },
+      { text: 'Supports my professional development', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 1, 'Agree': 1, 'Strongly Agree': 1 } },
+      { text: 'Communicates expectations clearly', responses: { 'Strongly Disagree': 0, 'Disagree': 0, 'Neutral': 0, 'Agree': 2, 'Strongly Agree': 1 } },
     ],
-    nps: { promoters: 1, passives: 1, detractors: 0 },
+    nps: { promoters: 2, passives: 1, detractors: 0 },
   },
 };
 
 // Talent ratings already submitted
 export const existingTalentRatings = {
-  u2: { what: null, how: null, submitted: false },
-  u3: { what: 'Exceeds expectations', how: 'Exceeds expectations', submitted: true },
-  u4: { what: null, how: null, submitted: false },
-  u5: { what: 'Meets expectations', how: 'Meets expectations', submitted: true },
+  u2: { what: null, how: null, whatContext: '', howContext: '', submitted: false },
+  u3: { what: 'Exceeds expectations', how: 'Exceeds expectations', whatContext: 'Taylor consistently exceeded targets across all operational KPIs, delivering 115% of quarterly objectives.', howContext: 'Taylor exemplified collaborative leadership, fostering strong cross-functional relationships and mentoring junior staff.', submitted: true },
+  u4: { what: null, how: null, whatContext: '', howContext: '', submitted: false },
+  u5: { what: 'Meets expectations', how: 'Meets expectations', whatContext: 'Riley delivered on core objectives despite leave of absence, demonstrating strong prioritization upon return.', howContext: 'Riley maintained professional standards and contributed positively to team culture throughout the year.', submitted: true },
+  u13: { what: null, how: null, whatContext: '', howContext: '', submitted: false },
+  u14: { what: null, how: null, whatContext: '', howContext: '', submitted: false },
+  u15: { what: 'Meets expectations', how: 'Does not meet expectations', whatContext: 'Elena delivered against her core objectives and improved operational processes in Q4.', howContext: 'Elena needs to be more proactive in team settings and improve communication with stakeholders on project timelines.', submitted: true },
 };
 
 // Tips for feedback
@@ -188,6 +336,11 @@ export const feedbackTips = [
   "Think about how your feedback will help this person in their next role.",
   "Strong feedback answers: What should they keep doing? What should they start doing?",
   "Feedback should reflect patterns, not one-off events. Look for consistent behaviors.",
+  "Consider the full picture — results, behaviors, and collaboration with others.",
+  "Ask yourself: would this feedback help me grow if I received it?",
+  "Separate intent from impact. Focus on what happened, not what was meant.",
+  "Acknowledge the difficulty of their role or circumstances when relevant.",
+  "Great feedback is forward-looking: it helps someone get better, not just reflect.",
 ];
 
 // Best practices for landing page
@@ -232,3 +385,13 @@ export const ratingScale = [
 ];
 
 export const npsScale = Array.from({ length: 11 }, (_, i) => i);
+
+// Expected curve distributions
+export const curveGuidance = {
+  what: {
+    'Exceeds expectations': 15,
+    'Meets expectations': 80,
+    'Does not meet expectations': 5,
+  },
+  how: null, // No anticipated distribution for "how"
+};

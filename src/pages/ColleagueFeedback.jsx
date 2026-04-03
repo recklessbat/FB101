@@ -51,6 +51,7 @@ export default function ColleagueFeedback() {
     : [];
 
   const tip = useMemo(() => feedbackTips[Math.floor(Math.random() * feedbackTips.length)], [submitted]);
+  const selectionTip = useMemo(() => feedbackTips[Math.floor(Math.random() * feedbackTips.length)], []);
 
   const handleAiCleanup = () => {
     setIsCleaningUp(true);
@@ -197,6 +198,17 @@ export default function ColleagueFeedback() {
           </div>
         )}
       </div>
+
+      {/* Feedback Tip shown before colleague is selected */}
+      {!selectedColleague && (
+        <div className="mb-6 animate-fade-in rounded-xl border border-slate-200 bg-amber-50/50 p-5">
+          <div className="mb-2 flex items-center gap-2">
+            <Lightbulb size={14} className="text-amber-500" />
+            <h3 className="text-[12px] font-semibold text-amber-700">Feedback Tip!</h3>
+          </div>
+          <p className="text-[13px] leading-relaxed text-slate-600 italic">"{selectionTip}"</p>
+        </div>
+      )}
 
       {/* Feedback box */}
       {selectedColleague && (
