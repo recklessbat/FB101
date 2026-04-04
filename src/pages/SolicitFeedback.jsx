@@ -49,11 +49,11 @@ export default function SolicitFeedback() {
   if (submitted) {
     return (
       <div className="animate-fade-in">
-        <div className="mx-auto max-w-lg pt-16 text-center">
-          <div className="mb-4 flex justify-center">
-            <CheckCircle2 size={48} className="text-green-500" />
+        <div className="max-w-lg pt-8">
+          <div className="mb-4 flex items-center gap-3">
+            <CheckCircle2 size={24} className="text-green-500" />
+            <h2 className="text-xl font-semibold text-slate-800">Feedback Request Sent</h2>
           </div>
-          <h2 className="mb-2 text-xl font-semibold text-slate-800">Feedback Request Sent</h2>
           <p className="mb-6 text-[13px] text-slate-500">
             A feedback request for <span className="font-medium text-slate-700">{selectedEmployee?.name}</span> has been sent to{' '}
             <span className="font-medium text-slate-700">{selectedColleague?.name}</span>.
@@ -92,7 +92,7 @@ export default function SolicitFeedback() {
         </p>
       </div>
 
-      <div className="mx-auto max-w-xl space-y-6">
+      <div className="max-w-xl space-y-6">
         {/* Step 1: Select team member */}
         <div className="rounded-xl border border-slate-200 p-5">
           <div className="mb-3 text-[13px] font-semibold text-slate-700">
@@ -172,7 +172,7 @@ export default function SolicitFeedback() {
         {/* Step 3: Optional note */}
         <div className="rounded-xl border border-slate-200 p-5">
           <div className="mb-3 text-[13px] font-semibold text-slate-700">
-            3. Add a Note <span className="font-normal text-slate-400">(optional)</span>
+            3. Context for Feedback Request <span className="font-normal text-slate-400">(optional)</span>
           </div>
           <textarea
             value={note}

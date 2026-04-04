@@ -235,31 +235,6 @@ function HistoryTab({ historic }) {
             <Bar dataKey="Incentive Comp" stackId="comp" fill="#22c55e" radius={[4, 4, 0, 0]} label={<CompLabel />} />
           </BarChart>
         </ResponsiveContainer>
-        {/* YoY detail table */}
-        {yoyData.some((d) => d.totalYoY !== null) && (
-          <div className="mt-3 overflow-hidden rounded-lg border border-slate-100">
-            <table className="w-full text-[11px]">
-              <thead className="bg-slate-50">
-                <tr>
-                  <th className="px-3 py-1.5 text-left font-semibold text-slate-500">Year</th>
-                  <th className="px-3 py-1.5 text-right font-semibold text-slate-500">Base YoY</th>
-                  <th className="px-3 py-1.5 text-right font-semibold text-slate-500">Incentive YoY</th>
-                  <th className="px-3 py-1.5 text-right font-semibold text-slate-500">Total YoY</th>
-                </tr>
-              </thead>
-              <tbody>
-                {yoyData.map((d) => (
-                  <tr key={d.year} className="border-t border-slate-100">
-                    <td className="px-3 py-1.5 text-slate-600">{d.year}</td>
-                    <td className="px-3 py-1.5 text-right text-slate-600">{d.salaryYoY !== null ? `${d.salaryYoY > 0 ? '+' : ''}${d.salaryYoY}%` : '—'}</td>
-                    <td className="px-3 py-1.5 text-right text-slate-600">{d.bonusYoY !== null ? `${d.bonusYoY > 0 ? '+' : ''}${d.bonusYoY}%` : '—'}</td>
-                    <td className="px-3 py-1.5 text-right font-medium text-slate-700">{d.totalYoY !== null ? `${d.totalYoY > 0 ? '+' : ''}${d.totalYoY}%` : '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
       </div>
     </div>
   );

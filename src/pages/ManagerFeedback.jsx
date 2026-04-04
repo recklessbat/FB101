@@ -9,6 +9,8 @@ import {
   AlertCircle,
   ArrowLeft,
   Circle,
+  Plus,
+  X,
 } from 'lucide-react';
 import {
   currentUser,
@@ -40,8 +42,41 @@ const mainScale = ratingScale.filter((r) => r !== 'Unable to Evaluate');
 
 export default function ManagerFeedback() {
   const saved = loadSaved();
-  const [activeManager, setActiveManager] = useState(null); // null = selection, 'direct' | 'alt'
+  const [activeManager, setActiveManager] = useState(null); // null = selection, 'direct' | 'alt' | 'alt_N'
   const [data, setData] = useState(saved || { direct: null, alt: null });
+
+  // Custom alt managers (added via "Add Alt Manager" button)
+  const [customAlts, setCustomAlts] = useState(() => {
+    try {
+      const raw = localStorage.getItem('custom_alt_managers');
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  });
+  const [showAddAlt, setShowAddAlt] = useState(false);
+  const [newAltSearch, setNewAltSearch] = useState('');
+  const newAltFiltered = newAltSearch.length > 1
+    ? others.filter((e) => e.name.toLowerCase().includes(newAltSearch.toLowerCase()) && !customAlts.some(a => a.id === e.id) && e.id !== currentUser.managerId)
+    : [];
+
+  const addCustomAlt = (emp) => {
+    const updated = [...customAlts, { id: emp.id, name: emp.name, title: emp.title }];
+    setCustomAlts(updated);
+    localStorage.setItem('custom_alt_managers', JSON.stringify(updated));
+    setNewAltSearch('');
+    setShowAddAlt(false);
+  };
+
+  const removeCustomAlt = (altId) => {
+    const updated = customAlts.filter(a => a.id !== altId);
+    setCustomAlts(updated);
+    localStorage.setItem('custom_alt_managers', JSON.stringify(updated));
+    // Also remove saved feedback for this alt
+    const key = `alt_${altId}`;
+    const updatedData = { ...data };
+    delete updatedData[key];
+    setData(updatedData);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
+  };
 
   // Form state
   const [managerName, setManagerName] = useState('');
@@ -68,8 +103,13 @@ export default function ManagerFeedback() {
     setActiveManager(type);
     if (type === 'direct') {
       setManagerName(existing?.managerName || currentUser.managerName);
-    } else {
+    } else if (type === 'alt') {
       setManagerName(existing?.managerName || currentUser.altManagerName || '');
+    } else {
+      // Custom alt (alt_uXX)
+      const altId = type.replace('alt_', '');
+      const customAlt = customAlts.find(a => a.id === altId);
+      setManagerName(existing?.managerName || customAlt?.name || '');
     }
     setRatings(existing?.ratings || {});
     setNps(existing?.nps ?? null);
@@ -111,15 +151,64 @@ export default function ManagerFeedback() {
     const altEntry = data.alt;
     return (
       <div className="animate-fade-in">
-        <div className="mb-8">
-          <div className="mb-1 flex items-center gap-2">
-            <UserCheck size={18} className="text-violet-600" />
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Manager Feedback</h1>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <div className="mb-1 flex items-center gap-2">
+              <UserCheck size={18} className="text-violet-600" />
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Manager Feedback</h1>
+            </div>
+            <p className="text-sm text-slate-500">
+              Provide quantitative feedback on your managers' competencies.
+            </p>
           </div>
-          <p className="text-sm text-slate-500">
-            Provide quantitative feedback on your managers' competencies.
-          </p>
+          <button
+            onClick={() => setShowAddAlt(!showAddAlt)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-[13px] font-medium text-slate-600 transition hover:bg-slate-50"
+          >
+            <Plus size={14} />
+            Add Alt / Dotted Line Manager
+          </button>
         </div>
+
+        {/* Add Alt Manager search */}
+        {showAddAlt && (
+          <div className="mb-4 animate-fade-in rounded-xl border border-slate-200 p-4">
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-[12px] font-semibold text-slate-600">Search for a manager to add</span>
+              <button onClick={() => { setShowAddAlt(false); setNewAltSearch(''); }} className="text-slate-400 hover:text-slate-600">
+                <X size={14} />
+              </button>
+            </div>
+            <div className="relative">
+              <input
+                type="text"
+                value={newAltSearch}
+                onChange={(e) => setNewAltSearch(e.target.value)}
+                placeholder="Search by name..."
+                className="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-[13px] outline-none focus:border-primary-300 focus:ring-2 focus:ring-primary-100"
+              />
+              {newAltFiltered.length > 0 && (
+                <div className="absolute z-10 mt-1 w-full rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
+                  {newAltFiltered.slice(0, 6).map((emp) => (
+                    <button
+                      key={emp.id}
+                      onClick={() => addCustomAlt(emp)}
+                      className="flex w-full items-center gap-3 px-4 py-2 text-left hover:bg-slate-50"
+                    >
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-[11px] font-semibold text-violet-700">
+                        {emp.name.split(' ').map((n) => n[0]).join('')}
+                      </div>
+                      <div>
+                        <div className="text-[13px] font-medium text-slate-800">{emp.name}</div>
+                        <div className="text-[11px] text-slate-400">{emp.title}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="space-y-3">
           {/* Direct Manager */}
@@ -145,7 +234,7 @@ export default function ManagerFeedback() {
             )}
           </button>
 
-          {/* Alt / Dotted Line Manager */}
+          {/* Pre-configured Alt / Dotted Line Manager */}
           {currentUser.altManagerId && (
             <button
               onClick={() => openForm('alt')}
@@ -171,6 +260,44 @@ export default function ManagerFeedback() {
               )}
             </button>
           )}
+
+          {/* Custom-added Alt Managers */}
+          {customAlts.map((alt) => {
+            const key = `alt_${alt.id}`;
+            const entry = data[key];
+            return (
+              <div key={alt.id} className="flex items-center gap-2">
+                <button
+                  onClick={() => openForm(key)}
+                  className="group flex flex-1 items-center gap-4 rounded-xl border border-slate-200 p-5 text-left transition-all hover:border-slate-300 hover:shadow-sm"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-50 text-[13px] font-semibold text-amber-700">
+                    {alt.name.split(' ').map((n) => n[0]).join('')}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[14px] font-medium text-slate-800">{alt.name}</div>
+                    <div className="text-[12px] text-slate-400">Alt / Dotted Line Manager</div>
+                  </div>
+                  {entry?.submitted ? (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-[11px] font-semibold text-green-700">
+                      <CheckCircle2 size={12} /> Submitted
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-500">
+                      <Circle size={12} /> Pending
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={() => removeCustomAlt(alt.id)}
+                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-500"
+                  title="Remove this alt manager"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
     );
@@ -232,7 +359,7 @@ export default function ManagerFeedback() {
             </p>
             <p className="mt-0.5 text-[15px] font-medium text-slate-800">{managerName}</p>
           </div>
-          {activeManager === 'alt' && (
+          {activeManager !== 'direct' && (
             <button
               onClick={() => setUseAltSearch(!useAltSearch)}
               className="flex items-center gap-1 text-[12px] font-medium text-primary-600 transition hover:text-primary-700"

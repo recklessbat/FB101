@@ -55,6 +55,13 @@ export default function ReviewTeamFeedback() {
                     {emp.title} · {collegFeedback.length} colleague feedback · {upwardFeedback ? `${upwardFeedback.respondents} upward responses` : 'No upward feedback'}
                   </div>
                 </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigate(`/solicit-feedback?employee=${emp.id}`); }}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-[11px] font-medium text-slate-500 transition hover:bg-slate-50 hover:text-slate-700"
+                >
+                  <UserPlus size={12} className="text-primary-500" />
+                  Solicit Feedback
+                </button>
                 {isExpanded ? (
                   <ChevronUp size={16} className="text-slate-400" />
                 ) : (
@@ -160,16 +167,6 @@ export default function ReviewTeamFeedback() {
                     )}
                   </div>
 
-                  {/* Solicit Additional Feedback */}
-                  <div className="mt-6 border-t border-slate-100 pt-4">
-                    <button
-                      onClick={() => navigate(`/solicit-feedback?employee=${emp.id}`)}
-                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-[13px] font-medium text-slate-600 transition hover:bg-slate-50"
-                    >
-                      <UserPlus size={14} className="text-primary-500" />
-                      Solicit Additional Feedback
-                    </button>
-                  </div>
                 </div>
               )}
             </div>

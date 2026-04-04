@@ -7,57 +7,34 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Customized,
+  ReferenceLine,
   Cell,
+  LabelList,
 } from 'recharts';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, SlidersHorizontal, X } from 'lucide-react';
 import { currentUser, employees, existingTalentRatings, curveGuidance } from '../data/mockData';
 
 const ratingLabels = ['Does not meet expectations', 'Meets expectations', 'Exceeds expectations'];
 const barColors = { 'Exceeds expectations': '#22c55e', 'Meets expectations': '#5c7cfa', 'Does not meet expectations': '#ef4444' };
 
-const GuidanceMarks = ({ data, formattedGraphicalItems }) => {
-  if (!formattedGraphicalItems?.length) return null;
-  const bars = formattedGraphicalItems[0]?.props?.data || [];
-  const firstItem = formattedGraphicalItems[0];
+const guidanceColors = { 'Exceeds expectations': '#86efac', 'Meets expectations': '#93c5fd', 'Does not meet expectations': '#fca5a5' };
 
+const GuidanceLabel = ({ viewBox, value, color }) => {
+  if (!viewBox) return null;
   return (
-    <g>
-      {bars.map((bar, idx) => {
-        const entry = data[idx];
-        if (!entry || entry.guidancePct === null) return null;
-        const x = bar.x;
-        const width = bar.width;
-        const areaTop = bar.background?.y ?? 0;
-        const areaHeight = bar.background?.height ?? 300;
-        const yPos = areaTop + areaHeight - (entry.guidancePct / 100) * areaHeight;
-
-        const markColor = entry.rating === 'Exceeds expectations' ? '#86efac'
-          : entry.rating === 'Meets expectations' ? '#93b4fd'
-          : '#fca5a5';
-
-        return (
-          <line
-            key={idx}
-            x1={x}
-            y1={yPos}
-            x2={x + width}
-            y2={yPos}
-            stroke={markColor}
-            strokeWidth={3}
-            strokeDasharray="6 3"
-          />
-        );
-      })}
-    </g>
+    <text x={viewBox.width + viewBox.x + 4} y={viewBox.y + 4} fontSize={10} fill={color} fontWeight={600}>
+      {value}%
+    </text>
   );
 };
 
 export default function TeamCurve() {
   const [activeTab, setActiveTab] = useState('what');
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [filterLocation, setFilterLocation] = useState('');
   const [filterGrade, setFilterGrade] = useState('');
   const [filterManager, setFilterManager] = useState('');
+  const activeFilterCount = [filterLocation, filterGrade, filterManager].filter(Boolean).length;
 
   const directReports = employees.filter((e) => e.managerId === currentUser.id);
 
@@ -176,14 +153,93 @@ export default function TeamCurve() {
 
   return (
     <div className="animate-fade-in">
-      <div className="mb-8">
-        <div className="mb-1 flex items-center gap-2">
-          <BarChart3 size={18} className="text-primary-600" />
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Review My Team Curve</h1>
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <div className="mb-1 flex items-center gap-2">
+            <BarChart3 size={18} className="text-primary-600" />
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Review My Team Curve</h1>
+          </div>
+          <p className="text-sm text-slate-500">
+            Review how your rating distribution aligns with organizational curve guidance.
+          </p>
         </div>
-        <p className="text-sm text-slate-500">
-          Review how your rating distribution aligns with organizational curve guidance.
-        </p>
+        <div className="relative">
+          <button
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-[13px] font-medium transition-all ${
+              activeFilterCount > 0
+                ? 'border-primary-300 bg-primary-50 text-primary-700'
+                : 'border-slate-200 text-slate-500 hover:border-slate-300'
+            }`}
+          >
+            <SlidersHorizontal size={14} />
+            Filters
+            {activeFilterCount > 0 && (
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-[10px] font-bold text-white">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
+          {filtersOpen && (
+            <div className="absolute right-0 top-full z-20 mt-2 w-72 animate-fade-in rounded-xl border border-slate-200 bg-white p-4 shadow-lg">
+              <div className="mb-3 flex items-center justify-between">
+                <span className="text-[12px] font-semibold text-slate-600">Filter Team</span>
+                <button onClick={() => setFiltersOpen(false)} className="text-slate-400 hover:text-slate-600">
+                  <X size={14} />
+                </button>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-slate-400">Location</label>
+                  <select
+                    value={filterLocation}
+                    onChange={(e) => setFilterLocation(e.target.value)}
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-[13px] text-slate-600 focus:border-primary-300 focus:outline-none"
+                  >
+                    <option value="">All Locations</option>
+                    {uniqueLocations.map(loc => (
+                      <option key={loc} value={loc}>{loc}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-slate-400">Grade</label>
+                  <select
+                    value={filterGrade}
+                    onChange={(e) => setFilterGrade(e.target.value)}
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-[13px] text-slate-600 focus:border-primary-300 focus:outline-none"
+                  >
+                    <option value="">All Grades</option>
+                    {uniqueGrades.map(g => (
+                      <option key={g} value={g}>{g}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-slate-400">Manager Tree</label>
+                  <select
+                    value={filterManager}
+                    onChange={(e) => setFilterManager(e.target.value)}
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-[13px] text-slate-600 focus:border-primary-300 focus:outline-none"
+                  >
+                    <option value="">All Manager Trees</option>
+                    {uniqueManagers.map(m => (
+                      <option key={m.id} value={m.id}>{m.name}</option>
+                    ))}
+                  </select>
+                </div>
+                {activeFilterCount > 0 && (
+                  <button
+                    onClick={() => { setFilterLocation(''); setFilterGrade(''); setFilterManager(''); }}
+                    className="w-full rounded-lg border border-slate-200 py-2 text-[12px] font-medium text-slate-500 transition hover:bg-slate-50"
+                  >
+                    Clear All Filters
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Summary */}
@@ -234,40 +290,6 @@ export default function TeamCurve() {
         >
           What &times; How Matrix
         </button>
-      </div>
-
-      {/* Filters */}
-      <div className="mb-6 flex gap-3">
-        <select
-          value={filterLocation}
-          onChange={(e) => setFilterLocation(e.target.value)}
-          className="rounded-lg border border-slate-200 px-3 py-2 text-[13px] text-slate-600 focus:border-primary-300 focus:outline-none"
-        >
-          <option value="">All Locations</option>
-          {uniqueLocations.map(loc => (
-            <option key={loc} value={loc}>{loc}</option>
-          ))}
-        </select>
-        <select
-          value={filterGrade}
-          onChange={(e) => setFilterGrade(e.target.value)}
-          className="rounded-lg border border-slate-200 px-3 py-2 text-[13px] text-slate-600 focus:border-primary-300 focus:outline-none"
-        >
-          <option value="">All Grades</option>
-          {uniqueGrades.map(g => (
-            <option key={g} value={g}>{g}</option>
-          ))}
-        </select>
-        <select
-          value={filterManager}
-          onChange={(e) => setFilterManager(e.target.value)}
-          className="rounded-lg border border-slate-200 px-3 py-2 text-[13px] text-slate-600 focus:border-primary-300 focus:outline-none"
-        >
-          <option value="">All Manager Trees</option>
-          {uniqueManagers.map(m => (
-            <option key={m.id} value={m.id}>{m.name}</option>
-          ))}
-        </select>
       </div>
 
       {/* 9-box Matrix view */}
@@ -365,12 +387,21 @@ export default function TeamCurve() {
                 domain={[0, 100]}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="% of Rated Staff" radius={[6, 6, 0, 0]} background={{ fill: 'transparent' }}>
+              <Bar dataKey="% of Rated Staff" radius={[6, 6, 0, 0]}>
                 {data.map((entry, idx) => (
                   <Cell key={idx} fill={barColors[entry.rating]} />
                 ))}
               </Bar>
-              {hasGuidance && <Customized component={<GuidanceMarks data={data} />} />}
+              {hasGuidance && data.map((entry) => entry.guidancePct !== null ? (
+                <ReferenceLine
+                  key={entry.rating}
+                  y={entry.guidancePct}
+                  stroke={guidanceColors[entry.rating]}
+                  strokeWidth={2}
+                  strokeDasharray="6 3"
+                  label={<GuidanceLabel value={entry.guidancePct} color={guidanceColors[entry.rating]} />}
+                />
+              ) : null)}
             </BarChart>
           </ResponsiveContainer>
 

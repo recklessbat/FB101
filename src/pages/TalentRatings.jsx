@@ -135,32 +135,6 @@ export default function TalentRatings() {
       <div className="flex gap-8">
         {/* Left side - Rating assignment */}
         <div className="w-80 shrink-0 space-y-6">
-          {/* Key Considerations */}
-          {hasAnyFlags && (
-            <div className="rounded-xl border border-slate-200 p-4">
-              <div className="mb-3 text-[12px] font-semibold uppercase tracking-wider text-slate-500">
-                Key Considerations
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {flags.promotionRadar && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
-                    <Award size={12} /> Promotion Radar Candidate
-                  </span>
-                )}
-                {flags.materialRiskTaker && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
-                    <AlertTriangle size={12} /> Material Risk Taker
-                  </span>
-                )}
-                {flags.designatedEmployee && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-semibold text-red-700">
-                    <Shield size={12} /> Designated Employee
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
-
           {/* Employee header */}
           <div className="rounded-xl border border-slate-200 p-5">
             <div className="mb-3 flex items-center gap-3">
@@ -204,7 +178,7 @@ export default function TalentRatings() {
             <textarea
               value={whatContext}
               onChange={(e) => setWhatContext(e.target.value)}
-              rows={3}
+              rows={6}
               placeholder="Contextualize what your employee delivered this year relative to objectives and goals..."
               className="mt-3 w-full resize-none rounded-lg border border-slate-200 px-3 py-2.5 text-[12px] text-slate-700 outline-none placeholder:text-slate-400 focus:border-primary-300 focus:ring-2 focus:ring-primary-100"
             />
@@ -236,7 +210,7 @@ export default function TalentRatings() {
             <textarea
               value={howContext}
               onChange={(e) => setHowContext(e.target.value)}
-              rows={3}
+              rows={6}
               placeholder="Contextualize how your employee delivered their objectives relative to expectations..."
               className="mt-3 w-full resize-none rounded-lg border border-slate-200 px-3 py-2.5 text-[12px] text-slate-700 outline-none placeholder:text-slate-400 focus:border-primary-300 focus:ring-2 focus:ring-primary-100"
             />
@@ -287,8 +261,32 @@ export default function TalentRatings() {
           </button>
         </div>
 
-        {/* Right side - Employee Insights */}
-        <div className="flex-1 min-w-0">
+        {/* Right side - Key Considerations + Employee Insights */}
+        <div className="flex-1 min-w-0 space-y-4">
+          {hasAnyFlags && (
+            <div className="rounded-xl border border-slate-200 p-4">
+              <div className="mb-3 text-[12px] font-semibold uppercase tracking-wider text-slate-500">
+                Key Considerations
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {flags.promotionRadar && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
+                    <Award size={12} /> Promotion Radar Candidate
+                  </span>
+                )}
+                {flags.materialRiskTaker && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
+                    <AlertTriangle size={12} /> Material Risk Taker
+                  </span>
+                )}
+                {flags.designatedEmployee && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-semibold text-red-700">
+                    <Shield size={12} /> Designated Employee
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
           <EmployeeInsights
             employee={selectedEmployee}
             historic={empHistoric}
